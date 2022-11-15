@@ -243,6 +243,18 @@ function BBoxOutput fn_compute(BBoxInput inp);
                result = fn_bseti(inp.rs1, inp.instr);//Function sets the value in the index location directly in rv32 architecture
                valid = True;   
            end 
+           `REV8_32: begin
+               result = fn_rev8(inp.rs1);
+               valid = True;
+           end
+           `RORI_32: begin
+               result = fn_rori(inp.rs1, inp.instr);
+               valid = True;
+           end
+           `ZEXT_H_32: begin
+              result = fn_zext_h(inp.rs1);
+              valid = True;
+           end
         endcase    
     end    
   endcase       
