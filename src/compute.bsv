@@ -34,6 +34,10 @@ function BBoxOutput fn_compute(BBoxInput inp);
   Bit#(XLEN) result = 0;
   Bool valid = False;
   case(inp.instr) matches
+   `ANDN: begin 
+      result = fn_andn(inp.rs1, inp.rs2);
+      valid = True;
+    end
    `BCLR: begin
       result = fn_bclr(inp.rs1, inp.rs2);//Function call to bclr with the inputs rs1, rs2; output stored in result
       valid = True;
@@ -62,7 +66,66 @@ function BBoxOutput fn_compute(BBoxInput inp);
       result = fn_clmulr(inp.rs1, inp.rs2);//Function call to clmulr with inputs rs1, rs2; output stored in result
       valid = True;
     end
-
+    `CLZ: begin
+      result = fn_clz(inp.rs1);
+      valid = True;
+    end
+    `CPOP: begin
+      result = fn_cpop(inp.rs1);
+      valid = True;
+    end
+    `CTZ: begin
+      result = fn_ctz(inp.rs1);
+      valid = True;
+    end
+    `MAX: begin
+      result = fn_max(inp.rs1, inp.rs2);
+      valid = True;
+    end
+    `MAXU: begin
+      result = fn_maxu(inp.rs1, inp.rs2);
+      valid = True;
+    end
+    `MIN: begin
+      result = fn_min(inp.rs1, inp.rs2);
+      valid = True;
+    end
+    `MINU: begin
+      result = fn_minu(inp.rs1, inp.rs2);
+      valid = True;
+    end
+    `ORC_B: begin
+      result = fn_orc_b(inp.rs1);
+      valid = True;
+    end
+    `ORN: begin
+      result = fn_orn(inp.rs1, inp.rs2);
+      valid = True;
+    end
+    `ROL: begin
+      result = fn_rol(inp.rs1, inp.rs2);
+      valid = True;
+    end
+    `ROLW: begin
+      result = fn_rolw(inp.rs1, inp.rs2);
+      valid = True;
+    end
+    `ROR: begin
+      result = fn_ror(inp.rs1, inp.rs2);
+      valid = True;
+    end
+    `RORW: begin
+      result = fn_rorw(inp.rs1, inp.rs2);
+      valid = True;
+    end
+    `SEXT_B: begin
+      result = fn_sext_b(inp.rs1);
+      valid = True;
+    end
+    `SEXT_H: begin
+      result = fn_sext_h(inp.rs1);
+      valid = True;
+    end
     `SH1ADD: begin
       result = fn_sh1add(inp.rs1, inp.rs2);//Function call to sh1add with inputs rs1, rs2; output stored in result
       valid = True;
@@ -73,6 +136,10 @@ function BBoxOutput fn_compute(BBoxInput inp);
     end
     `SH3ADD: begin
       result = fn_sh3add(inp.rs1, inp.rs2);//Function call to sh3add with inputs rs1, rs2; output stored in result
+      valid = True;
+    end
+    `XNOR: begin
+      result = fn_xnor(inp.rs1, inp.rs2);
       valid = True;
     end
     default: begin
