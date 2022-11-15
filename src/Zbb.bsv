@@ -172,12 +172,15 @@ function Bit#(XLEN) fn_orn(Bit#(XLEN) rs1, Bit#(XLEN) rs2);
   return rs1 | ~rs2;//performing rs1 or with negated rs2
 endfunction
 
-//Instruction-26 rev8: reversing bits of each byte
+//Instruction-26 rev8: reversing byte order
 function Bit#(XLEN) fn_rev8(Bit#(XLEN) rs1);
   Bit#(XLEN) out = 0;
-  for(Bit#(XLEN) i = 0; i < fromInteger(valueof(XLEN)); i = i+8) begin       
-        for (Bit#(XLEN) j = 0; j< 8; j = j+1)//getting a byte
-              out[i+j] = rs1[i+7-j];//reversing value by value in each byte taken
+  Bit#(8) rsn1 = 0;
+  Bit#(XLEN) j = fromInteger(valueof(XLEN)) -1;
+  for(Bit#(XLEN) i = 0; i < fromInteger(valueof(XLEN)); i = i+8) begin   
+      rsn1 = rs1[j:j-7]; //Taking byte and reversing order by coming from both ends
+      out[i+7:i] = rsn1;
+      j = j-8;
   end
   return out;
 endfunction
