@@ -44,6 +44,6 @@ endfunction
 //Instruction-41: slli_uw:
 //Function to shift left unsigned word(Immediate)
 function Bit#(XLEN) fn_slli_uw(Bit#(XLEN) rs1, Bit#(32) instr);
-  int shamt = unpack(zeroExtend(instr[26:20]));//ZeroExtending the shift amount given in instruction and converting to integer
+  int shamt = unpack(zeroExtend(instr[25:20]));//ZeroExtending the shift amount given in instruction and converting to integer
   return (zeroExtend(rs1[31:0]) << shamt);//LSB word of rs1 is zeroExtended and then leftshifted by the value specified by shift amount
 endfunction
