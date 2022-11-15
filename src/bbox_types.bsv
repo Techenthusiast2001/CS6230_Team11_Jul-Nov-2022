@@ -17,7 +17,7 @@ package bbox_types;
 `ifdef RV64
    typedef 64 XLEN;
    typedef 32 XLEN_BY_2;
-   typedef 6  XLEN_log;
+   typedef 6  XLEN_log;//added XLEN_log to ease extraction of log(XLEN) from instruction
 `else
    typedef 32 XLEN;
    typedef 5 XLEN_log;
