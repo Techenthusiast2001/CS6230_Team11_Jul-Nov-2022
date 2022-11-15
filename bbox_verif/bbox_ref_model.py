@@ -22,56 +22,55 @@ def bbox_rm(instr, rs1, rs2, XLEN):
     if instr == 0b01000000000000000111000000110011:#ANDN
         res = rs1 & ~rs2#anding with negated 2nd operand
         valid = '1'
-    ## logic for all other instr starts # ADD.UW
-    elif (instr == 0b00001000000000000000000000111011 and XLEN ==64):
+    ## logic for all other instr starts 
+    elif (instr == 0b00001000000000000000000000111011 and XLEN ==64):# ADD.UW
        res = (rs2 + rs1 % 2**32) % 2**XLEN#Unsigned word of rs1 is added to rs2
        valid = '1'
     elif instr == 0b01001000000000000001000000110011:#BCLR
        res = rs1 & ~(1 << (rs2 % 2**XLEN_log))#clearing bit of rs1 using log(XLEN) bits of rs2
        valid = '1'
+    ##Uniquely identifying instructions by comparing the fixed part for all immediate instructions that follow
     elif ((bin(instr)[-31:-26] == '10010') and (bin(instr)[-15:-12] == '001') and (bin(instr)[-7:] == '0010011') and XLEN==64):#BCLRI_64
-       shamt = int(bin(instr)[-26:-20], 2)#Extarcting shamt
+       shamt = int(bin(instr)[-26:-20], 2)#Extracting shamt
        res = rs1 & ~(1 << shamt)#Clearing bit at shamt loc in rs1
        valid = '1'
-    elif ((bin(instr)[-31:-25] == '100100') and (bin(instr)[-15:-12] == '001') and (bin(instr)[-7:] == '0010011') and XLEN==32):#BC;RI_32
-       shamt = int(bin(instr)[-25:-20], 2)
-       res = rs1 & ~(1 << shamt)#Extracting shamt
-       valid = '1'   #Clearing bit at shamt loc in rs1
+    elif ((bin(instr)[-31:-25] == '100100') and (bin(instr)[-15:-12] == '001') and (bin(instr)[-7:] == '0010011') and XLEN==32):#BCLRI_32
+       shamt = int(bin(instr)[-25:-20], 2)#Extracting shamt from instr
+       res = rs1 & ~(1 << shamt) #Clearing bit at shamt loc in rs1
+       valid = '1'  
     elif instr == 0b01001000000000000101000000110011: #BEXT
-       res = (rs1 >> (rs2 % 2**XLEN_log)) & 1
+       res = (rs1 >> (rs2 % 2**XLEN_log)) & 1#Extracting bit of rs1 using log(xlen) bits of rs2
        valid = '1'
-    elif ((bin(instr)[-31:-26] == '10010') and (bin(instr)[-15:-12] == '101') and (bin(instr)[-7:] == '0010011') and XLEN==64):#BEXTI
-       shamt = int(bin(instr)[-26:-20], 2)
-       res = (rs1 >> shamt) & 1
+    elif ((bin(instr)[-31:-26] == '10010') and (bin(instr)[-15:-12] == '101') and (bin(instr)[-7:] == '0010011') and XLEN==64):#BEXTI_64 -
+       shamt = int(bin(instr)[-26:-20], 2)#Extracting shamt from instr
+       res = (rs1 >> shamt) & 1#Extracting bit of rs1 at shamt
        valid = '1'
-    elif ((bin(instr)[-31:-25] == '100100') and (bin(instr)[-15:-12] == '101') and (bin(instr)[-7:] == '0010011') and XLEN==32):
-       shamt = int(bin(instr)[-25:-20], 2)
-       res = (rs1 >> shamt) & 1
+    elif ((bin(instr)[-31:-25] == '100100') and (bin(instr)[-15:-12] == '101') and (bin(instr)[-7:] == '0010011') and XLEN==32):#BEXTI_32
+       shamt = int(bin(instr)[-25:-20], 2)#Extracting shamt from instr
+       res = (rs1 >> shamt) & 1#Extracting bit of rs1 at shamt
        valid = '1'
-    ## logic for all other instr ends
     elif instr == 0b01101000000000000001000000110011:#BINV
-       res = rs1 ^ (1 << (rs2 % 2**XLEN_log))
+       res = rs1 ^ (1 << (rs2 % 2**XLEN_log))#Inverting bit of rs1 using log(xlen) bits of rs2
        valid = '1'
-    elif ((bin(instr)[-31:-26] == '11010') and (bin(instr)[-15:-12] == '001') and (bin(instr)[-7:] == '0010011') and XLEN==64):#BINVI
-       shamt = int(bin(instr)[-26:-20], 2)
-       res = rs1 ^ (1 << (shamt))
+    elif ((bin(instr)[-31:-26] == '11010') and (bin(instr)[-15:-12] == '001') and (bin(instr)[-7:] == '0010011') and XLEN==64):#BINVI_64
+       shamt = int(bin(instr)[-26:-20], 2)#Extracting shamt from instr
+       res = rs1 ^ (1 << (shamt))#inverting bit of rs1 at shamt
        valid = '1'
-    elif ((bin(instr)[-31:-25] == '110100') and (bin(instr)[-15:-12] == '001') and (bin(instr)[-7:] == '0010011') and XLEN==32):#BINVI
-       shamt = int(bin(instr)[-25:-20], 2)
-       res = rs1 ^ (1 << (shamt))
+    elif ((bin(instr)[-31:-25] == '110100') and (bin(instr)[-15:-12] == '001') and (bin(instr)[-7:] == '0010011') and XLEN==32):#BINVI_32
+       shamt = int(bin(instr)[-25:-20], 2)#Extracting shamt from instr
+       res = rs1 ^ (1 << (shamt))#inverting bit of rs1 at shamt
        valid = '1'
-    elif instr == 0b00101000000000000001000000110011:
-       res = rs1 | (1 << (rs2 % 2**XLEN_log));
+    elif instr == 0b00101000000000000001000000110011:#BSET
+       res = rs1 | (1 << (rs2 % 2**XLEN_log));#setting bit of rs1 using log(xlen) bits of rs2
        valid = '1'
-    elif ((bin(instr)[-30:-26] == '1010') and (bin(instr)[-15:-12] == '001') and (bin(instr)[-7:] == '0010011') and XLEN==64):#BSETI
-       shamt = int(bin(instr)[-26:-20], 2)
-       res = rs1 | (1 << (shamt))
+    elif ((bin(instr)[-30:-26] == '1010') and (bin(instr)[-15:-12] == '001') and (bin(instr)[-7:] == '0010011') and XLEN==64):#BSETI_64
+       shamt = int(bin(instr)[-26:-20], 2)#extracting shamt from instr
+       res = rs1 | (1 << (shamt))#setting bit of rs1 at shamt
        valid = '1'
-    elif ((bin(instr)[-30:-25] == '10100') and (bin(instr)[-15:-12] == '001') and (bin(instr)[-7:] == '0010011') and XLEN==32):#BSETI
-       shamt = int(bin(instr)[-25:-20], 2)
-       res = rs1 | (1 << (shamt))
+    elif ((bin(instr)[-30:-25] == '10100') and (bin(instr)[-15:-12] == '001') and (bin(instr)[-7:] == '0010011') and XLEN==32):#BSETI_32
+       shamt = int(bin(instr)[-25:-20], 2)#extracting shamt from instr
+       res = rs1 | (1 << (shamt))#setting bit of rs1 at shamt
        valid = '1'
-
     elif instr == 0b00001010000000000001000000110011:#clmul
        res = 0; i = 0
        while (rs1>>i) > 0:
