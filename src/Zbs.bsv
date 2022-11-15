@@ -36,7 +36,7 @@ function Bit#(XLEN) fn_bexti(Bit#(XLEN) rs1, Bit#(32) instr);
   return rs1>>shamt & 1;//extracts the bit in rs1 in location specified by shamt
 endfunction
 
-//Instruction-7 binv: rs1 ^ (1 << (rs2 & (#(XLEN) -1)))
+//Instruction-7 binv: rs1 ^ (1 << (rs2 & (XLEN) -1)))
 
 function Bit#(XLEN) fn_binv(Bit#(XLEN) rs1, Bit#(XLEN) rs2);
     Bit#(XLEN) index =  0;
@@ -48,7 +48,7 @@ function Bit#(XLEN) fn_binv(Bit#(XLEN) rs1, Bit#(XLEN) rs2);
   return rs1 ^ (1 << index);//inverts the bit in rs1 location specified by index
 endfunction
 
-//Instruction-8 binvi:  
+//Instruction-8 binvi:  rs1 ^ (1 << (shamt & (XLEN) -1)))
 
 function Bit#(XLEN) fn_binvi(Bit#(XLEN) rs1, Bit#(32) instr);
    Bit#(XLEN_log) shamt =  instr[19+valueof(XLEN_log):20];//extracting shamt from instruction
@@ -56,7 +56,7 @@ function Bit#(XLEN) fn_binvi(Bit#(XLEN) rs1, Bit#(32) instr);
 endfunction
 
 
-//Instruction-9 bset: rs1 | (1 << (rs2 & (#(XLEN) -1)))
+//Instruction-9 bset: rs1 | (1 << (rs2 & ((XLEN) -1)))
 
 function Bit#(XLEN) fn_bset(Bit#(XLEN) rs1, Bit#(XLEN) rs2);
     Bit#(XLEN) index =  0;
@@ -68,7 +68,7 @@ function Bit#(XLEN) fn_bset(Bit#(XLEN) rs1, Bit#(XLEN) rs2);
   return rs1 | (1 << (index));//sets the bit in rs1 at index 
 endfunction
 
-//Instruction-10 bseti:  
+//Instruction-10 bseti:  rs1 | (1 << (shamt & ((XLEN) -1)))
 
 function Bit#(XLEN) fn_bseti(Bit#(XLEN) rs1, Bit#(32) instr);
    Bit#(XLEN_log) shamt =  instr[19+valueof(XLEN_log):20];//extracting shamt from instruction
