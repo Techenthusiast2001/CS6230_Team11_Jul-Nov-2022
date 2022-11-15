@@ -270,7 +270,15 @@ def bbox_rm(instr, rs1, rs2, XLEN):
        shamt = int(bin(instr)[-26:-20], 2)#shift amount extraction
        res = ((rs1 % 2**32) << shamt) % 2**XLEN#rs1 left shifted by the shift amount
        valid = '1'
-        
+    elif instr == 0b01000000000000000100000000110011:#XNOR
+       res = ~(rs1 ^ rs2) % 2**XLEN
+       valid = '1'
+    elif (instr == 0b00001000000000000100000000111011 and XLEN==64):#ZEXT_H
+       res = rs1 % 2**16
+       valid = '1'
+    elif (instr == 0b00001000000000000100000000110011 and XLEN==32):#ZEXT_H
+       res = rs1 % 2**16
+       valid = '1'        
     ## logic for all other instr ends
     else:
         res = 0
