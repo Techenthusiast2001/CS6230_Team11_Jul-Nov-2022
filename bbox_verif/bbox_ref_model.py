@@ -19,24 +19,24 @@ import math
 #Reference model
 def bbox_rm(instr, rs1, rs2, XLEN):
     XLEN_log = int(math.log2(XLEN))
-    if instr == 0b01000000000000000111000000110011:
-        res = rs1 & ~rs2
+    if instr == 0b01000000000000000111000000110011:#ANDN
+        res = rs1 & ~rs2#anding with negated 2nd operand
         valid = '1'
     ## logic for all other instr starts # ADD.UW
     elif (instr == 0b00001000000000000000000000111011 and XLEN ==64):
        res = (rs2 + rs1 % 2**32) % 2**XLEN#Unsigned word of rs1 is added to rs2
        valid = '1'
     elif instr == 0b01001000000000000001000000110011:#BCLR
-       res = rs1 & ~(1 << (rs2 % 2**XLEN_log))
+       res = rs1 & ~(1 << (rs2 % 2**XLEN_log))#clearing bit of rs1 using log(XLEN) bits of rs2
        valid = '1'
-    elif ((bin(instr)[-31:-26] == '10010') and (bin(instr)[-15:-12] == '001') and (bin(instr)[-7:] == '0010011') and XLEN==64):#BCLRI
-       shamt = int(bin(instr)[-26:-20], 2)
-       res = rs1 & ~(1 << shamt)
+    elif ((bin(instr)[-31:-26] == '10010') and (bin(instr)[-15:-12] == '001') and (bin(instr)[-7:] == '0010011') and XLEN==64):#BCLRI_64
+       shamt = int(bin(instr)[-26:-20], 2)#Extarcting shamt
+       res = rs1 & ~(1 << shamt)#Clearing bit at shamt loc in rs1
        valid = '1'
-    elif ((bin(instr)[-31:-25] == '100100') and (bin(instr)[-15:-12] == '001') and (bin(instr)[-7:] == '0010011') and XLEN==32):
+    elif ((bin(instr)[-31:-25] == '100100') and (bin(instr)[-15:-12] == '001') and (bin(instr)[-7:] == '0010011') and XLEN==32):#BC;RI_32
        shamt = int(bin(instr)[-25:-20], 2)
-       res = rs1 & ~(1 << shamt)
-       valid = '1'   
+       res = rs1 & ~(1 << shamt)#Extracting shamt
+       valid = '1'   #Clearing bit at shamt loc in rs1
     elif instr == 0b01001000000000000101000000110011: #BEXT
        res = (rs1 >> (rs2 % 2**XLEN_log)) & 1
        valid = '1'
