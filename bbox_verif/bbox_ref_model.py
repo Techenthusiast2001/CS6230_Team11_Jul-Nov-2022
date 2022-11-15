@@ -26,7 +26,52 @@ def bbox_rm(instr, rs1, rs2, XLEN):
     elif (instr == 0b00001000000000000000000000111011 and XLEN ==64):
        res = (rs2 + rs1 % 2**32) % 2**XLEN#Unsigned word of rs1 is added to rs2
        valid = '1'
-   
+    elif instr == 0b01001000000000000001000000110011:#BCLR
+       res = rs1 & ~(1 << (rs2 % 2**XLEN_log))
+       valid = '1'
+    elif ((bin(instr)[-31:-26] == '10010') and (bin(instr)[-15:-12] == '001') and (bin(instr)[-7:] == '0010011') and XLEN==64):#BCLRI
+       shamt = int(bin(instr)[-26:-20], 2)
+       res = rs1 & ~(1 << shamt)
+       valid = '1'
+    elif ((bin(instr)[-31:-25] == '100100') and (bin(instr)[-15:-12] == '001') and (bin(instr)[-7:] == '0010011') and XLEN==32):
+       shamt = int(bin(instr)[-25:-20], 2)
+       res = rs1 & ~(1 << shamt)
+       valid = '1'   
+    elif instr == 0b01001000000000000101000000110011: #BEXT
+       res = (rs1 >> (rs2 % 2**XLEN_log)) & 1
+       valid = '1'
+    elif ((bin(instr)[-31:-26] == '10010') and (bin(instr)[-15:-12] == '101') and (bin(instr)[-7:] == '0010011') and XLEN==64):#BEXTI
+       shamt = int(bin(instr)[-26:-20], 2)
+       res = (rs1 >> shamt) & 1
+       valid = '1'
+    elif ((bin(instr)[-31:-25] == '100100') and (bin(instr)[-15:-12] == '101') and (bin(instr)[-7:] == '0010011') and XLEN==32):
+       shamt = int(bin(instr)[-25:-20], 2)
+       res = (rs1 >> shamt) & 1
+       valid = '1'
+    ## logic for all other instr ends
+    elif instr == 0b01101000000000000001000000110011:#BINV
+       res = rs1 ^ (1 << (rs2 % 2**XLEN_log))
+       valid = '1'
+    elif ((bin(instr)[-31:-26] == '11010') and (bin(instr)[-15:-12] == '001') and (bin(instr)[-7:] == '0010011') and XLEN==64):#BINVI
+       shamt = int(bin(instr)[-26:-20], 2)
+       res = rs1 ^ (1 << (shamt))
+       valid = '1'
+    elif ((bin(instr)[-31:-25] == '110100') and (bin(instr)[-15:-12] == '001') and (bin(instr)[-7:] == '0010011') and XLEN==32):#BINVI
+       shamt = int(bin(instr)[-25:-20], 2)
+       res = rs1 ^ (1 << (shamt))
+       valid = '1'
+    elif instr == 0b00101000000000000001000000110011:
+       res = rs1 | (1 << (rs2 % 2**XLEN_log));
+       valid = '1'
+    elif ((bin(instr)[-30:-26] == '1010') and (bin(instr)[-15:-12] == '001') and (bin(instr)[-7:] == '0010011') and XLEN==64):#BSETI
+       shamt = int(bin(instr)[-26:-20], 2)
+       res = rs1 | (1 << (shamt))
+       valid = '1'
+    elif ((bin(instr)[-30:-25] == '10100') and (bin(instr)[-15:-12] == '001') and (bin(instr)[-7:] == '0010011') and XLEN==32):#BSETI
+       shamt = int(bin(instr)[-25:-20], 2)
+       res = rs1 | (1 << (shamt))
+       valid = '1'
+
     elif instr == 0b00001010000000000001000000110011:#clmul
        res = 0; i = 0
        while (rs1>>i) > 0:
