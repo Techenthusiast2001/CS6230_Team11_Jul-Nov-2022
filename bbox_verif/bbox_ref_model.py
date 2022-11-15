@@ -95,35 +95,35 @@ def bbox_rm(instr, rs1, rs2, XLEN):
             i += 1
        res = (res // 2**(XLEN-1)) % 2**XLEN
        valid = '1'
-    elif instr == 0b01100000000000000001000000010011:
+    elif instr == 0b01100000000000000001000000010011:#clz
        res = 0
        for k in range(XLEN-1, -1, -1):
-           if(rs1 >= 2**k):
-                res = XLEN-k-1 
-                break
+           if(rs1 >= 2**k):#comparing with 2 power k to find if value at kth index=1
+                res = XLEN-k-1 #no of zeros
+                break #stop count after encountering first 1
        valid = '1'
-    elif instr == 0b01100000000000000001000000011011:
+    elif instr == 0b01100000000000000001000000011011:#clzw
         res = 0
-        for k in range(31, -1, -1):
+        for k in range(31, -1, -1):#same as above only on lsw
           if(rs1 % 2**32 >= 2**k):
              res = 31-k
              break
         valid = '1'
-    elif instr == 0b01100000001000000001000000010011:
-      rs1 = str(bin(rs1))
+    elif instr == 0b01100000001000000001000000010011:#cpop
+      rs1 = str(bin(rs1))#converts into string
+      res = 0
+      for i in rs1:
+         if i == "1"#checks if a bit is 1/not
+            res+=1#if it is '1' add 1 to count no. of 1's in rs1
+      valid = '1'
+    elif instr == 0b01100000001000000001000000011011:#cpopw
+      rs1 = str(bin(rs1 % 2**32))#same as above only on lsw
       res = 0
       for i in rs1:
          if i == "1":
             res+=1
       valid = '1'
-    elif instr == 0b01100000001000000001000000011011:
-      rs1 = str(bin(rs1 % 2**32))
-      res = 0
-      for i in rs1:
-         if i == "1":
-            res+=1
-      valid = '1'
-    elif instr == 0b01100000000100000001000000010011:
+    elif instr == 0b01100000000100000001000000010011:#ctz
         res = 0
         for k in range(XLEN-1, -1, -1):
           if(rs1 % 2**k == 0):
