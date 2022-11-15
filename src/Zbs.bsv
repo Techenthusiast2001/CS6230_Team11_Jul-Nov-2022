@@ -29,7 +29,7 @@ function Bit#(XLEN) fn_bext(Bit#(XLEN) rs1, Bit#(XLEN) rs2);
   return rs1 >> index & 1;//extracts bit from location specified  by index
 endfunction
 
-//Instruction-6 bexti:  
+//Instruction-6 bexti:   X(rd) = (X(rs1) >> (shamt & (XLEN - 1))) & 1
 
 function Bit#(XLEN) fn_bexti(Bit#(XLEN) rs1, Bit#(32) instr);
    Bit#(XLEN_log) shamt =  instr[19+valueof(XLEN_log):20];//extracting shamt from instruction
