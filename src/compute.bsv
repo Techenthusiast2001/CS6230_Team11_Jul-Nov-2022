@@ -218,6 +218,10 @@ function BBoxOutput fn_compute(BBoxInput inp);
            `SLLI_UW: begin
                result = fn_slli_uw(inp.rs1, inp.instr);//Function call to slli_uw with inputs rs1, shamt; output stored in result
                valid = True;              
+           end        
+           `ZEXT_H_64: begin
+              result = fn_zext_h(inp.rs1);
+              valid = True;
            end
        endcase
     end
