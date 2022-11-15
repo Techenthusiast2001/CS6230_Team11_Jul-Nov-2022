@@ -33,7 +33,23 @@ import bbox_types :: *;
 function BBoxOutput fn_compute(BBoxInput inp);
   Bit#(XLEN) result = 0;
   Bool valid = False;
-  case(inp.instr) matches 
+  case(inp.instr) matches
+   `BCLR: begin
+      result = fn_bclr(inp.rs1, inp.rs2);
+      valid = True;
+    end
+    `BEXT: begin
+      result = fn_bext(inp.rs1, inp.rs2);
+      valid = True;
+    end
+    `BINV: begin
+      result = fn_binv(inp.rs1, inp.rs2);
+      valid = True;
+    end
+    `BSET: begin
+      result = fn_bset(inp.rs1, inp.rs2);
+      valid = True;
+    end
     `CLMUL: begin
       result = fn_clmul(inp.rs1, inp.rs2);//Function call to clmul with inputs rs1, rs2; output stored in result
       valid = True;
