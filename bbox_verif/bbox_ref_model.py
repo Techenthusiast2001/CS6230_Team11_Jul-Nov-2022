@@ -220,32 +220,31 @@ def bbox_rm(instr, rs1, rs2, XLEN):
         valid = '1'
     elif ((bin(instr)[-31:-25] == '110000') and (bin(instr)[-15:-12] == '101') and (bin(instr)[-7:] == '0011011') and XLEN==64):#RORIW 
         shamt = int(bin(instr)[-25:-20], 2)
-        rs1 = rs1 % 2**32
-        res1 = (rs1 % 2**(shamt))* 2**(32-shamt)
-        res2 = rs1 // 2**shamt
-        res = res1 + res2
-        if(res >= 2**31):
+        rs1 = rs1 % 2**32#lsw of rs1
+        res1 = (rs1 % 2**(shamt))* 2**(32-shamt)#lower shamt bits shifted up
+        res2 = rs1 // 2**shamt#upper bits shifted right by shamt
+        res = res1 + res2#final result
+        if(res >= 2**31):#sign extending it
           res += (2**XLEN - 2**32)
         valid = '1'
     elif (instr == 0b01100000000000000101000000111011 and XLEN==64): #RORW
-        rs1 = rs1 % 2**32
-        shamt = rs2 % 2**5
-        #res1 = (2**shamt - 1- (rs1 % 2**(shamt))) * 2**(XLEN-shamt)   #smallest shamt bits reversed and shifted up
-        res1 = (rs1 % 2**(shamt))* 2**(32-shamt)
-        res2 = rs1 // 2**shamt
-        res = (res1 + res2)
-        if(res >= 2**31):
+        rs1 = rs1 % 2**32 #lsw of rs1
+        shamt = rs2 % 2**5 #getting log(xlen) bits of rs2
+        res1 = (rs1 % 2**(shamt))* 2**(32-shamt)#lower bits shifted up
+        res2 = rs1 // 2**shamt #upper bits shifted right by shamt
+        res = (res1 + res2)#final result
+        if(res >= 2**31):#signextending it
            res+= (2**XLEN - 2**32)
         valid = '1'
     elif instr == 0b01100000010000000001000000010011:#SEXT_B
-       res = rs1 % 2**8
-       if (res >= 2**7):
-          res+=(2**XLEN -1 - 255)
+       res = rs1 % 2**8#Getting last 8 bits
+       if (res >= 2**7):#Identifying MSB of it
+          res+=(2**XLEN -1 - 255)#Sign extending it
        valid = '1'
     elif instr == 0b01100000010100000001000000010011:#SEXT_H
-       res = rs1 % 2**16
-       if(res >= 2**15):
-          res+=(2**XLEN - 2**16)
+       res = rs1 % 2**16#Getting last 16 bits
+       if(res >= 2**15):#Identifying MSB if it
+          res+=(2**XLEN - 2**16)#Sign extending it
        valid = '1'
     elif instr == 0b00100000000000000010000000110011:#SH1ADD
        res = (rs2 + (rs1 << 1)) % 2**XLEN#rs1 is shifted left by 1 position and then added with rs2
@@ -270,13 +269,13 @@ def bbox_rm(instr, rs1, rs2, XLEN):
        res = ((rs1 % 2**32) << shamt) % 2**XLEN#rs1 left shifted by the shift amount
        valid = '1'
     elif instr == 0b01000000000000000100000000110011:#XNOR
-       res = ~(rs1 ^ rs2) % 2**XLEN
+       res = ~(rs1 ^ rs2) % 2**XLEN #not of xor
        valid = '1'
     elif (instr == 0b00001000000000000100000000111011 and XLEN==64):#ZEXT_H
-       res = rs1 % 2**16
+       res = rs1 % 2**16#Getting last 16 bits
        valid = '1'
     elif (instr == 0b00001000000000000100000000110011 and XLEN==32):#ZEXT_H
-       res = rs1 % 2**16
+       res = rs1 % 2**16 #Getting last 16 bits
        valid = '1'        
     ## logic for all other instr ends
     else:
