@@ -171,6 +171,38 @@ function BBoxOutput fn_compute(BBoxInput inp);
                result = fn_bseti(inp.rs1, inp.instr);//Function sets the value in the index location directly
                valid = True;   
            end
+           `CLZW: begin
+               result = fn_clzw(inp.rs1);
+               valid = True;
+           end
+           `CPOPW: begin
+                result = fn_cpopw(inp.rs1);
+                valid = True;
+           end
+           `CTZW: begin
+               result = fn_ctzw(inp.rs1);
+               valid = True;
+           end
+           `REV8_64: begin
+               result = fn_rev8(inp.rs1);
+               valid = True;
+           end
+           `ROLW: begin
+               result = fn_rolw(inp.rs1, inp.rs2);
+               valid = True;
+           end
+           `RORI_64: begin
+               result = fn_rori(inp.rs1, inp.instr);
+               valid = True;
+           end
+           `RORIW:  begin
+               result = fn_roriw(inp.rs1, inp.instr);
+               valid = True;
+           end
+           `RORW: begin
+               result = fn_rorw(inp.rs1, inp.rs2);
+               valid = True;
+           end
            `SH1ADD_UW: begin
                result = fn_sh1add_uw(inp.rs1, inp.rs2);//Function call to sh1add_uw with inputs rs1, rs2; output stored in result
                valid = True;   
