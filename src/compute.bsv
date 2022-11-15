@@ -118,11 +118,30 @@ function BBoxOutput fn_compute(BBoxInput inp);
            end
            `SLLI_UW: begin
                result = fn_slli_uw(inp.rs1, inp.instr);//Function call to slli_uw with inputs rs1, shamt; output stored in result
-               valid = True;   
-           end           
+               valid = True;              
            end
        endcase
     end
+    32: begin
+       case(inp.instr) matches
+           `BCLRI_32: begin
+               result = fn_bclri(inp.rs1, inp.instr);
+               valid = True;  
+           end 
+           `BEXTI_32: begin
+               result = fn_bexti(inp.rs1, inp.instr);
+               valid = True;   
+           end     
+           `BINVI_32: begin
+               result = fn_binvi(inp.rs1, inp.instr);
+               valid = True;  
+           end 
+           `BSETI_32: begin
+               result = fn_bseti(inp.rs1, inp.instr);
+               valid = True;   
+           end 
+        endcase    
+    end    
   endcase       
   return BBoxOutput{valid: valid, data: result};
 endfunction
