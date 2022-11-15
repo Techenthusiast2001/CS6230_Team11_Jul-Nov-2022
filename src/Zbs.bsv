@@ -2,12 +2,12 @@
 
 function Bit#(XLEN) fn_bclr(Bit#(XLEN) rs1, Bit#(XLEN) rs2);
     Bit#(XLEN) index =  0;
-    `ifdef RV64
-       index = zeroExtend(rs2[5:0]);
+    `ifdef RV64 //Checks for XLEN= 32 or 64
+       index = zeroExtend(rs2[5:0]);//Extarcts last 6 bits from rs2
     `else 
-       index = zeroExtend(rs2[4:0]);
+       index = zeroExtend(rs2[4:0]);//Extracts last 5 bits from rs2
     `endif
-  return rs1 & ~(1 << index );
+  return rs1 & ~(1 << index );//clears the bit in rs1 in location specified by index
 endfunction
 
 //Instruction-4 bclri:  X(rd) = X(rs1) & ~(1 << (shamt & (XLEN - 1)))
