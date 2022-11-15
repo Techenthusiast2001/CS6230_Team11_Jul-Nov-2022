@@ -88,6 +88,21 @@ function BBoxOutput fn_compute(BBoxInput inp);
               result = fn_add_uw(inp.rs1, inp.rs2);//Function call to and_uw with inputs rs1, rs2; output stored in result
               valid = True;
            end
+           `BCLRI_64: begin
+               result = fn_bclri(inp.rs1, inp.instr);//Function clears the value in the index location directly
+               valid = True;  
+           end 
+           `BEXTI_64: begin
+               result = fn_bexti(inp.rs1, inp.instr);
+               valid = True;   
+           end     
+           `BINVI_64: begin
+               result = fn_binvi(inp.rs1, inp.instr);
+               valid = True;  
+           end 
+           `BSETI_64: begin
+               result = fn_bseti(inp.rs1, inp.instr);
+               valid = True;   
            end
            `SH1ADD_UW: begin
                result = fn_sh1add_uw(inp.rs1, inp.rs2);//Function call to sh1add_uw with inputs rs1, rs2; output stored in result
