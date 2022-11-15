@@ -35,19 +35,19 @@ function BBoxOutput fn_compute(BBoxInput inp);
   Bool valid = False;
   case(inp.instr) matches
    `BCLR: begin
-      result = fn_bclr(inp.rs1, inp.rs2);
+      result = fn_bclr(inp.rs1, inp.rs2);//Function call to bclr with the inputs rs1, rs2; output stored in result
       valid = True;
     end
     `BEXT: begin
-      result = fn_bext(inp.rs1, inp.rs2);
+      result = fn_bext(inp.rs1, inp.rs2);//Function call to bext with the inputs rs1, rs2; output stored in result
       valid = True;
     end
     `BINV: begin
-      result = fn_binv(inp.rs1, inp.rs2);
+      result = fn_binv(inp.rs1, inp.rs2);//Function call to binv with the inputs rs1, rs2; output stored in result
       valid = True;
     end
     `BSET: begin
-      result = fn_bset(inp.rs1, inp.rs2);
+      result = fn_bset(inp.rs1, inp.rs2);//Function call to bset with the inputs rs1, rs2; output stored in result
       valid = True;
     end
     `CLMUL: begin
@@ -93,15 +93,15 @@ function BBoxOutput fn_compute(BBoxInput inp);
                valid = True;  
            end 
            `BEXTI_64: begin
-               result = fn_bexti(inp.rs1, inp.instr);
+               result = fn_bexti(inp.rs1, inp.instr);//Function extends the value in the index location directly
                valid = True;   
            end     
            `BINVI_64: begin
-               result = fn_binvi(inp.rs1, inp.instr);
+               result = fn_binvi(inp.rs1, inp.instr);//Function inverts the value in the index location directly
                valid = True;  
            end 
            `BSETI_64: begin
-               result = fn_bseti(inp.rs1, inp.instr);
+               result = fn_bseti(inp.rs1, inp.instr);//Function sets the value in the index location directly
                valid = True;   
            end
            `SH1ADD_UW: begin
@@ -125,19 +125,19 @@ function BBoxOutput fn_compute(BBoxInput inp);
     32: begin
        case(inp.instr) matches
            `BCLRI_32: begin
-               result = fn_bclri(inp.rs1, inp.instr);
+               result = fn_bclri(inp.rs1, inp.instr);//Function clears the value in the index location directly in rv32 architecture
                valid = True;  
            end 
            `BEXTI_32: begin
-               result = fn_bexti(inp.rs1, inp.instr);
+               result = fn_bexti(inp.rs1, inp.instr);//Function extends the value in the index location directly in rv32 architecture
                valid = True;   
            end     
            `BINVI_32: begin
-               result = fn_binvi(inp.rs1, inp.instr);
+               result = fn_binvi(inp.rs1, inp.instr);//Function inverts the value in the index location directly in rv32 architecture
                valid = True;  
            end 
            `BSETI_32: begin
-               result = fn_bseti(inp.rs1, inp.instr);
+               result = fn_bseti(inp.rs1, inp.instr);//Function sets the value in the index location directly in rv32 architecture
                valid = True;   
            end 
         endcase    
